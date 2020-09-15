@@ -46,7 +46,7 @@ class Field {
       this.placeTetromino();
       this.spawnTetromino();
     }else{
-      this.movingpiece.moveDown(this.grid);
+      this.movingpiece.moveDown(1);
     }
   }
 
@@ -81,51 +81,62 @@ class Field {
 
   pieceDown() {
     if(!this.movingpiece.touchGround(this.grid)){
-      this.movingpiece.moveDown(this.grid);
-    }
-  }
-
-  pieceStraightDown() {
-    while(!this.movingpiece.touchGround(this.grid)){
-      this.movingpiece.moveDown(this.grid);
+      clearInterval(update_interval);
+      update_interval = setInterval(function(){field.update();}, timer);
     }
     this.update();
   }
 
-  pieceToLeft() {
+  pieceStraightDown() {
+    while(!this.movingpiece.touchGround(this.grid)){
+      this.movingpiece.moveDown(1);
+    }
+    this.update();
+  }
+
+  pieceToLeft(steps) {
     if(!this.movingpiece.touchLeft(this.grid)){
-      this.movingpiece.moveLeft(this.grid);
+      this.movingpiece.moveLeft(steps);
     }
   }
 
-  pieceToRight() {
+  pieceToRight(steps) {
     if(!this.movingpiece.touchRight(this.grid)){
-      this.movingpiece.moveRight(this.grid);
+      this.movingpiece.moveRight(steps);
     }
   }
 
   rotatePiece() {
     if(!this.movingpiece.obstructed(this.grid)){
-      this.movingpiece.rotate(this.grid);
+      this.movingpiece.rotate();
     }
   }
 
-  moveTetromino(keyCode) {
-    switch(keyCode) {
-      case UP_ARROW:
-        this.rotatePiece();
-        break;
-      case LEFT_ARROW:
-        this.pieceToLeft();
-        break;
-      case RIGHT_ARROW:
-        this.pieceToRight();
-        break;
-      case DOWN_ARROW:
-        this.pieceDown();
-        break;
-      case 32:  // keyCode for space bar
-        this.pieceStraightDown();
+  leftRightMove() {
+    if(keyIsDown(LEFT_ARROW)){
+      if(keyIsDown(RIGHT_ARROW) == false || keyCode != RIGHT_ARROW)
+        this.pieceToLeft(1);
+    }
+    if(keyIsDown(RIGHT_ARROW)){
+      if(keyIsDown(LEFT_ARROW) == false || keyCode != LEFT_ARROW)
+        this.pieceToRight(1);
+    }
+  }
+
+  downMove() {
+    if(keyIsDown(DOWN_ARROW)){
+      delay_time = 0;
+      this.pieceDown();
+    }else{
+      delay_time = movementDelay;
+    }
+  }
+
+  pressMove() {
+    if(keyCode == UP_ARROW){
+      this.rotatePiece();
+    }else if(keyCode == 32){
+      this.pieceStraightDown();
     }
   }
 }

@@ -34,18 +34,18 @@ class Piece {
     return next_form;
   }
 
-  moveDown(grid) {
-    this.y++;
+  moveDown(step) {
+    this.y += step
     this.blocks = this.fillBlocks(this.shapes[this.form]);
   }
 
-  moveRight(grid) {
-    this.x++;
+  moveRight(step) {
+    this.x += step
     this.blocks = this.fillBlocks(this.shapes[this.form]);
   }
 
-  moveLeft(grid) {
-    this.x--;
+  moveLeft(step) {
+    this.x -= step;
     this.blocks = this.fillBlocks(this.shapes[this.form]);
   }
 
