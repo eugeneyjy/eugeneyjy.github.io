@@ -25,34 +25,63 @@ class Piece {
     return blocks;
   }
 
-  moveDown() {
-    if(!this.blocks.some(block => block.y == height-1)){
-      this.y++;
-      this.blocks = this.fillBlocks(this.shapes[this.form]);
+  nextForm() {
+    var next_form = this.form;
+    next_form++;
+    if(next_form >= 4){
+      next_form = 0;
     }
+    return next_form;
   }
 
-  moveRight() {
-    if(this.blocks[3].x < width-1){
-      this.x++;
-      this.blocks = this.fillBlocks(this.shapes[this.form]);
-    }
+  moveDown(grid) {
+    this.y++;
+    this.blocks = this.fillBlocks(this.shapes[this.form]);
   }
 
-  moveLeft() {
-    if(this.blocks[0].x > 0){
-      this.x--;
-      this.blocks = this.fillBlocks(this.shapes[this.form]);
-    }
+  moveRight(grid) {
+    this.x++;
+    this.blocks = this.fillBlocks(this.shapes[this.form]);
+  }
+
+  moveLeft(grid) {
+    this.x--;
+    this.blocks = this.fillBlocks(this.shapes[this.form]);
   }
 
   rotate() {
-    this.form++;
-    if(this.form >= 4){
-      this.form = 0;
-    }
+    this.form = this.nextForm();
     // print(this.form);
     this.blocks = this.fillBlocks(this.shapes[this.form]);
+  }
+
+  touchGround(grid) {
+    if(this.blocks.some(block =>  block.y+1 == height || grid[block.x][block.y+1].state == 1 )){
+      return true;
+    }
+    return false;
+  }
+
+  touchLeft(grid) {
+    if(this.blocks.some(block =>  block.x == 0 || grid[block.x-1][block.y].state == 1)){
+      return true;
+    }
+    return false;
+  }
+
+  touchRight(grid) {
+    if(this.blocks.some(block => block.x == 9 || grid[block.x+1][block.y].state == 1)){
+      return true;
+    }
+    return false;
+  }
+
+  obstructed(grid) {
+    var newform = this.fillBlocks(this.shapes[this.nextForm()]);
+    if(newform.some(block => (block.x < 0 || block.x > 9) || (block.y > 19) || grid[block.x][block.y].state == 1)){
+      return true;
+    }
+    return false;
   }
 }
 

@@ -14,6 +14,7 @@ function draw() {
   background("white");
 
   // pieces.forEach((piece) => {piece.show()});
+  // field.update();
   field.show();
   // piece2.show();
 }

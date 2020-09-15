@@ -9,31 +9,45 @@ class Field {
   }
 
   fillGrid() {
-    for(var i = 0; i < this.height; i++){
+    for(var i = 0; i < this.width; i++){
       this.grid.push([]);
-      for(var j = 0; j < this.width; j++){
-        this.grid[i].push(new Block(j,i));
+      for(var j = 0; j < this.height; j++){
+        this.grid[i].push(new Block(i,j));
       }
     }
   }
 
   show() {
-    stroke(211);
-    strokeWeight(light);
     for(var i = 0; i < this.grid.length; i++){
       for(var j = 0; j < this.grid[i].length; j++){
-        this.grid[i][j].show();
+        if(this.grid[i][j].state == 0)
+          this.grid[i][j].show();
       }
     }
     stroke(0);
     strokeWeight(bold);
     noFill();
     rect(offset_x, offset_y, this.width*blockSize, this.height*blockSize);
+    for(var i = 0; i < this.grid.length; i++){
+      for(var j = 0; j < this.grid[i].length; j++){
+        if(this.grid[i][j].state == 1)
+            this.grid[i][j].show();
+      }
+    }
     this.movingpiece.show();
   }
 
+  placeTetromino() {
+    this.movingpiece.blocks.forEach(block => this.grid[block.x][block.y] = block.copyBlock());
+  }
+
   update() {
-    this.movingpiece.moveDown();
+    if(this.movingpiece.touchGround(this.grid)){
+      this.placeTetromino();
+      this.spawnTetromino();
+    }else{
+      this.movingpiece.moveDown(this.grid);
+    }
   }
 
   spawnTetromino() {
@@ -65,20 +79,53 @@ class Field {
     this.movingpiece = tetromino;
   }
 
+  pieceDown() {
+    if(!this.movingpiece.touchGround(this.grid)){
+      this.movingpiece.moveDown(this.grid);
+    }
+  }
+
+  pieceStraightDown() {
+    while(!this.movingpiece.touchGround(this.grid)){
+      this.movingpiece.moveDown(this.grid);
+    }
+    this.update();
+  }
+
+  pieceToLeft() {
+    if(!this.movingpiece.touchLeft(this.grid)){
+      this.movingpiece.moveLeft(this.grid);
+    }
+  }
+
+  pieceToRight() {
+    if(!this.movingpiece.touchRight(this.grid)){
+      this.movingpiece.moveRight(this.grid);
+    }
+  }
+
+  rotatePiece() {
+    if(!this.movingpiece.obstructed(this.grid)){
+      this.movingpiece.rotate(this.grid);
+    }
+  }
+
   moveTetromino(keyCode) {
     switch(keyCode) {
       case UP_ARROW:
-        this.movingpiece.rotate();
+        this.rotatePiece();
         break;
       case LEFT_ARROW:
-        this.movingpiece.moveLeft();
+        this.pieceToLeft();
         break;
       case RIGHT_ARROW:
-        this.movingpiece.moveRight();
+        this.pieceToRight();
         break;
       case DOWN_ARROW:
-        this.movingpiece.moveDown();
+        this.pieceDown();
         break;
+      case 32:  // keyCode for space bar
+        this.pieceStraightDown();
     }
   }
 }

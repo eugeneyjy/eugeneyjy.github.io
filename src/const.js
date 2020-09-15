@@ -1,7 +1,7 @@
 // sketch.js
 const canvasWidth = 650;
 const canvasHeight = 650;
-const timer = 500; // millisecond
+const timer = 600; // millisecond
 
 // block.js
 const blockSize = 25; // width and height of each block
