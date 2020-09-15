@@ -58,5 +58,5 @@ const jcolor = {r: 3, g: 65, b: 174};
 const lcolor = {r: 255, g: 151, b: 28};
 
 // stroke
-const bold = 2.5;
+const bold = 2.2;
 const light = 1.5;

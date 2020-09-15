@@ -120,7 +120,6 @@ class Field {
       clearInterval(update_interval);
       update_interval = setInterval(function(){field.update();}, timer);
     }
-    // this.update();
   }
 
   pieceStraightDown() {

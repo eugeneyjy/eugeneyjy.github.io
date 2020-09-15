@@ -8,19 +8,25 @@ class Block {
 
   show() {
     var {r, g, b} = this.color;
+    var strokesize;
     fill(r, g, b);
     if(this.state == 1){
+      strokesize = bold;
       stroke(0);
-      strokeWeight(bold);
+      strokeWeight(strokesize);
     }else if(this.state == 0){
+      strokesize = light;
       stroke(211);
-      strokeWeight(light);
+      strokeWeight(strokesize);
     }else if(this.state == 2){
+      strokesize = bold;
       stroke(r,g,b, alpha);
-      strokeWeight(bold);
+      strokeWeight(strokesize);
       fill(r, g, b, alpha);
     }
+    // rect(this.x*blockSize + offset_x, this.y*blockSize + offset_y, blockSize-strokesize/2, blockSize-strokesize/2);
     rect(this.x*blockSize + offset_x, this.y*blockSize + offset_y, blockSize, blockSize);
+
   }
 
   update() {
