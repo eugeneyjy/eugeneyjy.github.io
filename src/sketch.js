@@ -16,6 +16,7 @@ function setup() {
 
 function draw() {
   background("white");
+  field.placeHint();
   field.show();
 }
 

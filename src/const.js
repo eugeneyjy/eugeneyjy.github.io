@@ -3,10 +3,11 @@ const canvasWidth = 650;
 const canvasHeight = 650;
 const timer = 600; // millisecond
 const movementDelay = 200;
-const move_timer = 60;
+const move_timer = 50;
 
 // block.js
 const blockSize = 25; // width and height of each block
+const alpha = 100;
 
 // field.js
 const width = 10; // field default width

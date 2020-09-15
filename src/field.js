@@ -3,7 +3,8 @@ class Field {
     this.width = width;
     this.height = height;
     this.grid = [];
-    this.movingpiece ;
+    this.movingpiece;
+    this.hint;
     this.fillGrid();
     this.spawnTetromino();
   }
@@ -34,6 +35,8 @@ class Field {
             this.grid[y][x].show();
       }
     }
+    if(this.hint)
+      this.hint.show();
     this.movingpiece.show();
   }
 
@@ -103,19 +106,27 @@ class Field {
     this.movingpiece = tetromino;
   }
 
+  placeHint() {
+    this.hint = this.movingpiece.clonePiece();
+    this.hint.changeState(2);
+    while(!this.hint.touchGround(this.grid)){
+      this.hint.moveDown(1);
+    }
+  }
+
   pieceDown() {
     if(!this.movingpiece.touchGround(this.grid)){
+      this.movingpiece.moveDown(1);
       clearInterval(update_interval);
       update_interval = setInterval(function(){field.update();}, timer);
     }
-    this.update();
+    // this.update();
   }
 
   pieceStraightDown() {
     while(!this.movingpiece.touchGround(this.grid)){
       this.movingpiece.moveDown(1);
     }
-    this.update();
   }
 
   pieceToLeft(steps) {
@@ -161,6 +172,7 @@ class Field {
       this.rotatePiece();
     }else if(keyCode == 32){
       this.pieceStraightDown();
+      this.update();
     }
   }
 }

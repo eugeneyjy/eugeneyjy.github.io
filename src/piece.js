@@ -1,8 +1,9 @@
 class Piece {
-  constructor(x, y, color = {r: 0, g: 0, b: 0}) {
+  constructor(x, y, color = {r: 0, g: 0, b: 0}, state = 1) {
     this.x = x;
     this.y = y;
     this.color = color;
+    this.state = state;
     this.blocks;
     this.form = 0;
   }
@@ -20,7 +21,7 @@ class Piece {
     for(var i = 0; i < shape.length; i++){
       var x = shape[i] % width;
       var y = Math.floor(shape[i] / width);
-      blocks.push(new Block(this.x + x, this.y + y, this.color, 1));
+      blocks.push(new Block(this.x + x, this.y + y, this.color, this.state));
     }
     return blocks;
   }
@@ -83,6 +84,20 @@ class Piece {
     }
     return false;
   }
+
+  clonePiece() {
+    var clone = Object.assign(Object.create(Object.getPrototypeOf(this)), this);
+    clone.blocks = this.fillBlocks(clone.shapes[clone.form]);
+    return clone;
+    // console.log(clone);
+  }
+
+  changeState(state) {
+    this.state = state;
+    for(var i = 0; i < this.blocks.length; i++){
+      this.blocks[i].state = state;
+    }
+  }
 }
 
 class Itetromino extends Piece {
@@ -91,6 +106,14 @@ class Itetromino extends Piece {
     this.shapes = ishape;
     this.blocks = this.fillBlocks(this.shapes[0]);
   }
+
+  // clonePiece() {
+  //   var clone = new Itetromino(this.x, this.y, this.color);
+  //   for(var i = 0; i < this.blocks; i++){
+  //     clone.blocks[i] = this.blocks[i].copyBlock();
+  //   }
+  //   return clone;
+  // }
 }
 
 class Otetromino extends Piece {
