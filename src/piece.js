@@ -56,21 +56,21 @@ class Piece {
   }
 
   touchGround(grid) {
-    if(this.blocks.some(block =>  block.y+1 == height || grid[block.x][block.y+1].state == 1 )){
+    if(this.blocks.some(block =>  block.y+1 == height || grid[block.y+1][block.x].state == 1 )){
       return true;
     }
     return false;
   }
 
   touchLeft(grid) {
-    if(this.blocks.some(block =>  block.x == 0 || grid[block.x-1][block.y].state == 1)){
+    if(this.blocks.some(block =>  block.x == 0 || grid[block.y][block.x-1].state == 1)){
       return true;
     }
     return false;
   }
 
   touchRight(grid) {
-    if(this.blocks.some(block => block.x == 9 || grid[block.x+1][block.y].state == 1)){
+    if(this.blocks.some(block => block.x == 9 || grid[block.y][block.x+1].state == 1)){
       return true;
     }
     return false;
@@ -78,7 +78,7 @@ class Piece {
 
   obstructed(grid) {
     var newform = this.fillBlocks(this.shapes[this.nextForm()]);
-    if(newform.some(block => (block.x < 0 || block.x > 9) || (block.y > 19) || grid[block.x][block.y].state == 1)){
+    if(newform.some(block => (block.x < 0 || block.x > 9) || (block.y > 19) || grid[block.y][block.x].state == 1)){
       return true;
     }
     return false;

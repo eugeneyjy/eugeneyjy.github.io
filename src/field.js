@@ -9,41 +9,65 @@ class Field {
   }
 
   fillGrid() {
-    for(var i = 0; i < this.width; i++){
+    for(var y = 0; y < this.height; y++){
       this.grid.push([]);
-      for(var j = 0; j < this.height; j++){
-        this.grid[i].push(new Block(i,j));
+      for(var x = 0; x < this.width; x++){
+        this.grid[y].push(new Block(x,y));
       }
     }
   }
 
   show() {
-    for(var i = 0; i < this.grid.length; i++){
-      for(var j = 0; j < this.grid[i].length; j++){
-        if(this.grid[i][j].state == 0)
-          this.grid[i][j].show();
+    for(var y = 0; y < this.grid.length; y++){
+      for(var x = 0; x < this.grid[y].length; x++){
+        if(this.grid[y][x].state == 0)
+          this.grid[y][x].show();
       }
     }
     stroke(0);
     strokeWeight(bold);
     noFill();
     rect(offset_x, offset_y, this.width*blockSize, this.height*blockSize);
-    for(var i = 0; i < this.grid.length; i++){
-      for(var j = 0; j < this.grid[i].length; j++){
-        if(this.grid[i][j].state == 1)
-            this.grid[i][j].show();
+    for(var y = 0; y < this.grid.length; y++){
+      for(var x = 0; x < this.grid[y].length; x++){
+        if(this.grid[y][x].state == 1)
+            this.grid[y][x].show();
       }
     }
     this.movingpiece.show();
   }
 
   placeTetromino() {
-    this.movingpiece.blocks.forEach(block => this.grid[block.x][block.y] = block.copyBlock());
+    this.movingpiece.blocks.forEach(block => this.grid[block.y][block.x] = block.copyBlock());
+  }
+
+  clearLine(line) {
+    for(var y = line; y > 0; y--){
+      for(var x = 0; x < this.grid[y].length; x++){
+        this.grid[y][x] = this.grid[y-1][x].copyBlock();
+        this.grid[y][x].y++;
+      }
+    }
+  }
+
+  clearLines() {
+    for(var y = 0; y < this.grid.length; y++){
+      var linefull = true;
+      for(var x = 0; x < this.grid[y].length; x++){
+        if(this.grid[y][x].state == 0){
+          linefull = false;
+        }
+      }
+      if(linefull){
+        this.clearLine(y);
+      }
+    }
   }
 
   update() {
     if(this.movingpiece.touchGround(this.grid)){
       this.placeTetromino();
+      this.clearLines();
       this.spawnTetromino();
     }else{
       this.movingpiece.moveDown(1);
