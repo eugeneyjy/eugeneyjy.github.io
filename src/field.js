@@ -23,18 +23,30 @@ class Field {
   }
 
   showNextPiece() {
+    var x = offset_x + (nextpiece_x-1)*blockSize;
+    var y =  offset_y + (nextpiece_y-1.5)*blockSize;
+    fill(0);
+    textSize(32);
+    textFont(font);
+    text('NEXT',x+blockSize, y-0.5*blockSize);
     stroke(0);
     strokeWeight(bold);
     noFill();
-    rect(offset_x + (nextpiece_x-1)*blockSize, offset_y + (nextpiece_y-1.5)*blockSize, 5*blockSize, 5*blockSize);
+    rect(x, y, 5*blockSize, 5*blockSize);
     this.nextpiece.show();
   }
 
   showHoldingPiece() {
+    var x = offset_x + (holdpiece_x-1)*blockSize;
+    var y =  offset_y + (holdpiece_y-1.5)*blockSize;
+    fill(0);
+    textSize(32);
+    textFont(font);
+    text('HOLD',x+blockSize, y-0.5*blockSize);
     stroke(0);
     strokeWeight(bold);
     noFill();
-    rect(offset_x + (holdpiece_x-1)*blockSize, offset_y + (holdpiece_y-1.5)*blockSize, 5*blockSize, 5*blockSize);
+    rect(x, y, 5*blockSize, 5*blockSize);
     if(this.holdpiece)
       this.holdpiece.show();
   }

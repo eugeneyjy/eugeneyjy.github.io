@@ -5,6 +5,11 @@ var update_interval;
 var move_interval;
 var down_interval;
 var speed_moving = false;
+var font;
+
+function preload() {
+  font = loadFont('font/PressStart2P-Regular.ttf');
+}
 
 function setup() {
   var canvas = createCanvas(canvasWidth, canvasHeight);
