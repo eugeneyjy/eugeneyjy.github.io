@@ -16,6 +16,8 @@ const offset_x = (canvasWidth-(width*blockSize))/2; // offset field in the middl
 const offset_y = (canvasHeight-(height*blockSize))/2; // offset field in the middle
 const starting_x = 3;
 const starting_y = 0;
+const nextpiece_x = 12;
+const nextpiece_y = 2;
 
 // piece.js
 // position of each shape

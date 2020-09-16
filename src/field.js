@@ -4,9 +4,11 @@ class Field {
     this.height = height;
     this.grid = [];
     this.movingpiece;
+    this.nextpiece;
     this.hint;
     this.fillGrid();
-    this.spawnTetromino();
+    this.nextpiece = this.spawnTetromino(nextpiece_x,nextpiece_y);
+    this.spawnNext();
   }
 
   fillGrid() {
@@ -16,6 +18,14 @@ class Field {
         this.grid[y].push(new Block(x,y));
       }
     }
+  }
+
+  showNextPiece() {
+    stroke(0);
+    strokeWeight(bold);
+    noFill();
+    rect(offset_x + (nextpiece_x-1)*blockSize, offset_y + (nextpiece_y-1.5)*blockSize, 5*blockSize, 5*blockSize);
+    this.nextpiece.show();
   }
 
   show() {
@@ -38,6 +48,7 @@ class Field {
     if(this.hint)
       this.hint.show();
     this.movingpiece.show();
+    this.showNextPiece();
   }
 
   placeTetromino() {
@@ -67,43 +78,54 @@ class Field {
     }
   }
 
+  spawnNext() {
+    this.movingpiece = this.nextpiece.clonePiece();
+    this.movingpiece.toLocation(starting_x, starting_y);
+    this.nextpiece = this.spawnTetromino(nextpiece_x, nextpiece_y);
+    if(this.nextpiece instanceof Itetromino){
+      this.nextpiece.toLocation(this.nextpiece.x-0.5, this.nextpiece.y-0.5);
+    }else if(this.nextpiece instanceof Otetromino){
+      this.nextpiece.toLocation(this.nextpiece.x-0.5, this.nextpiece.y);
+    }
+  }
+
   update() {
     if(this.movingpiece.touchGround(this.grid)){
       this.placeTetromino();
       this.clearLines();
-      this.spawnTetromino();
+      this.spawnNext();
     }else{
       this.movingpiece.moveDown(1);
     }
   }
 
-  spawnTetromino() {
-    var random = Math.floor(Math.random()*7);
+  spawnTetromino(x, y) {
+    var random1 = Math.floor(Math.random()*7);
     var tetromino;
-    switch(random) {
+    switch(random1) {
       case 0:
-        tetromino = new Itetromino(starting_x, starting_y);
+        tetromino = new Itetromino(x, y);
         break;
       case 1:
-        tetromino = new Otetromino(starting_x, starting_y);
+        tetromino = new Otetromino(x, y);
         break;
       case 2:
-        tetromino = new Ttetromino(starting_x, starting_y);
+        tetromino = new Ttetromino(x, y);
         break;
       case 3:
-        tetromino = new Stetromino(starting_x, starting_y);
+        tetromino = new Stetromino(x, y);
         break;
       case 4:
-        tetromino = new Ztetromino(starting_x, starting_y);
+        tetromino = new Ztetromino(x, y);
         break;
       case 5:
-        tetromino = new Jtetromino(starting_x, starting_y);
+        tetromino = new Jtetromino(x, y);
         break;
       case 6:
-        tetromino = new Ltetromino(starting_x, starting_y);
+        tetromino = new Ltetromino(x, y);
         break;
     }
-    this.movingpiece = tetromino;
+    return tetromino;
   }
 
   placeHint() {

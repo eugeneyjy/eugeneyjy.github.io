@@ -98,6 +98,12 @@ class Piece {
       this.blocks[i].state = state;
     }
   }
+
+  toLocation(x, y){
+    this.x = x;
+    this.y = y;
+    this.blocks = this.fillBlocks(this.shapes[this.form]);
+  }
 }
 
 class Itetromino extends Piece {
