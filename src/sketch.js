@@ -20,7 +20,7 @@ function draw() {
 
 function keyPressed() {
   speed_moving = false;
-  if(keyCode == UP_ARROW || keyCode == 32 || keyCode == DOWN_ARROW){
+  if(keyCode == UP_ARROW || keyCode == 32 || keyCode == DOWN_ARROW || keyCode == 67){
     field.pressMove();
   }else{
     field.leftRightMove();

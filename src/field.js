@@ -5,6 +5,8 @@ class Field {
     this.grid = [];
     this.movingpiece;
     this.nextpiece;
+    this.holdpiece = null;
+    this.held = false;
     this.hint;
     this.fillGrid();
     this.nextpiece = this.spawnTetromino(nextpiece_x,nextpiece_y);
@@ -28,6 +30,15 @@ class Field {
     this.nextpiece.show();
   }
 
+  showHoldingPiece() {
+    stroke(0);
+    strokeWeight(bold);
+    noFill();
+    rect(offset_x + (holdpiece_x-1)*blockSize, offset_y + (holdpiece_y-1.5)*blockSize, 5*blockSize, 5*blockSize);
+    if(this.holdpiece)
+      this.holdpiece.show();
+  }
+
   show() {
     for(var y = 0; y < this.grid.length; y++){
       for(var x = 0; x < this.grid[y].length; x++){
@@ -49,6 +60,7 @@ class Field {
       this.hint.show();
     this.movingpiece.show();
     this.showNextPiece();
+    this.showHoldingPiece();
   }
 
   placeTetromino() {
@@ -78,15 +90,22 @@ class Field {
     }
   }
 
+  offsetPiece(piece) {
+    if(piece instanceof Itetromino){
+      piece.toLocation(piece.x-0.5, piece.y-0.5);
+    }else if(piece instanceof Otetromino){
+      piece.toLocation(piece.x-0.5, piece.y);
+    }
+    while(piece.form != 0){
+      piece.rotate();
+    }
+  }
+
   spawnNext() {
     this.movingpiece = this.nextpiece.clonePiece();
     this.movingpiece.toLocation(starting_x, starting_y);
     this.nextpiece = this.spawnTetromino(nextpiece_x, nextpiece_y);
-    if(this.nextpiece instanceof Itetromino){
-      this.nextpiece.toLocation(this.nextpiece.x-0.5, this.nextpiece.y-0.5);
-    }else if(this.nextpiece instanceof Otetromino){
-      this.nextpiece.toLocation(this.nextpiece.x-0.5, this.nextpiece.y);
-    }
+    this.offsetPiece(this.nextpiece);
   }
 
   update() {
@@ -94,6 +113,7 @@ class Field {
       this.placeTetromino();
       this.clearLines();
       this.spawnNext();
+      this.held = false;
     }else{
       this.movingpiece.moveDown(1);
     }
@@ -126,6 +146,31 @@ class Field {
         break;
     }
     return tetromino;
+  }
+
+  swapPiece(piece1, piece2) {
+    var temp, piece2_x = piece2.x, piece2_y = piece2.y;
+    temp = piece1.clonePiece();
+    piece1 = piece2.clonePiece();
+    piece1.toLocation(temp.x, temp.y);
+    piece2 = temp.clonePiece();
+    piece2.toLocation(piece2_x, piece2_y);
+    return [piece1, piece2];
+  }
+
+  hold() {
+    if(this.holdpiece == null){
+      this.holdpiece = this.movingpiece.clonePiece();
+      this.holdpiece.toLocation(holdpiece_x, holdpiece_y);
+      this.offsetPiece(this.holdpiece);
+      this.spawnNext();
+    }else{
+      [this.holdpiece, this.movingpiece] = this.swapPiece(this.holdpiece, this.movingpiece);
+      this.movingpiece.toLocation(starting_x, starting_y);
+      this.holdpiece.toLocation(holdpiece_x, holdpiece_y);
+      this.offsetPiece(this.holdpiece);
+    }
+    this.held = true;
   }
 
   placeHint() {
@@ -194,6 +239,9 @@ class Field {
     }else if(keyCode == 32){
       this.pieceStraightDown();
       this.update();
+    }else if(keyCode == 67){
+      if(this.held == false)
+        this.hold();
     }
   }
 }
