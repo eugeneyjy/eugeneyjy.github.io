@@ -8,7 +8,7 @@ var speed_moving = false;
 // var font = 'Courier New';
 
 function preload() {
-  font = loadFont('./src/font/PressStart2P-Regular.ttf');
+  font = loadFont('./assets/font/PressStart2P-Regular.ttf');
 }
 
 function setup() {
