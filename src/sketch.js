@@ -8,7 +8,7 @@ var speed_moving = false;
 var font;
 
 function preload() {
-  font = loadFont('font/PressStart2P-Regular.ttf');
+  font = loadFont('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 }
 
 function setup() {
