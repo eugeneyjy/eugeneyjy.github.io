@@ -35,7 +35,7 @@ class Field {
     text('NEXT',x+side/2, y-0.5*blockSize);
     stroke(0);
     strokeWeight(bold);
-    noFill();
+    fill(255);
     rect(x, y, side, side);
     this.nextpiece.show();
   }
@@ -53,7 +53,7 @@ class Field {
     text('HOLD',x+side/2, y-0.5*blockSize);
     stroke(0);
     strokeWeight(bold);
-    noFill();
+    fill(255);
     rect(x, y, side, side);
     if(this.holdpiece)
       this.holdpiece.show();

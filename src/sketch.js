@@ -18,7 +18,7 @@ function setup() {
 }
 
 function draw() {
-  background("white");
+  background(238,238,238);
   field.placeHint();
   field.show();
 }
