@@ -8,6 +8,7 @@ class Field {
     this.holdpiece = null;
     this.held = false;
     this.hint;
+    this.lose = false;
     this.fillGrid();
     this.nextpiece = this.spawnTetromino(nextpiece_x,nextpiece_y);
     this.spawnNext();
@@ -110,6 +111,16 @@ class Field {
     }
   }
 
+  isLose() {
+    var losing = false;
+    for(var x = 0; x < this.grid[0].length; x++){
+      if(this.grid[0][x].state == 1){
+        losing = true;
+      }
+    }
+    return losing;
+  }
+
   offsetPiece(piece) {
     if(piece instanceof Itetromino){
       piece.toLocation(piece.x-0.5, piece.y-0.5);
@@ -129,13 +140,17 @@ class Field {
   }
 
   update() {
-    if(this.movingpiece.touchGround(this.grid)){
-      this.placeTetromino();
-      this.clearLines();
-      this.spawnNext();
-      this.held = false;
-    }else{
-      this.movingpiece.moveDown(1);
+    if(!this.lose){
+      if(this.movingpiece.touchGround(this.grid)){
+        this.placeTetromino();
+        this.clearLines();
+        this.lose = this.isLose();
+        if(!this.lose)
+          this.spawnNext();
+        this.held = false;
+      }else{
+        this.movingpiece.moveDown(1);
+      }
     }
   }
 
