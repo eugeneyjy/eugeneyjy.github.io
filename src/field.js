@@ -25,28 +25,36 @@ class Field {
   showNextPiece() {
     var x = offset_x + (nextpiece_x-1)*blockSize;
     var y =  offset_y + (nextpiece_y-1.5)*blockSize;
+    var side = 5*blockSize;
     fill(0);
-    textSize(32);
+    noStroke();
+    textSize(text_size);
+    textStyle(NORMAL);
     textFont(font);
-    text('NEXT',x+blockSize, y-0.5*blockSize);
+    textAlign(CENTER);
+    text('NEXT',x+side/2, y-0.5*blockSize);
     stroke(0);
     strokeWeight(bold);
     noFill();
-    rect(x, y, 5*blockSize, 5*blockSize);
+    rect(x, y, side, side);
     this.nextpiece.show();
   }
 
   showHoldingPiece() {
     var x = offset_x + (holdpiece_x-1)*blockSize;
     var y =  offset_y + (holdpiece_y-1.5)*blockSize;
+    var side = 5*blockSize;
     fill(0);
-    textSize(32);
+    noStroke();
+    textSize(text_size);
+    textStyle(NORMAL);
     textFont(font);
-    text('HOLD',x+blockSize, y-0.5*blockSize);
+    textAlign(CENTER);
+    text('HOLD',x+side/2, y-0.5*blockSize);
     stroke(0);
     strokeWeight(bold);
     noFill();
-    rect(x, y, 5*blockSize, 5*blockSize);
+    rect(x, y, side, side);
     if(this.holdpiece)
       this.holdpiece.show();
   }

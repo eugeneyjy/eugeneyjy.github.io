@@ -5,10 +5,10 @@ var update_interval;
 var move_interval;
 var down_interval;
 var speed_moving = false;
-var font;
+// var font = 'Courier New';
 
 function preload() {
-  font = loadFont('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+  font = loadFont('./src/font/PressStart2P-Regular.ttf');
 }
 
 function setup() {

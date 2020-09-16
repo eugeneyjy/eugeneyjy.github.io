@@ -20,6 +20,7 @@ const nextpiece_x = 12;
 const nextpiece_y = 3;
 const holdpiece_x = -5;
 const holdpiece_y = 3;
+const text_size = 22;
 
 // piece.js
 // position of each shape
