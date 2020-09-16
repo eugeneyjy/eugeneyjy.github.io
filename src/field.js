@@ -9,6 +9,8 @@ class Field {
     this.held = false;
     this.hint;
     this.lose = false;
+    this.score = 0;
+    this.lines = 0;
     this.fillGrid();
     this.nextpiece = this.spawnTetromino(nextpiece_x,nextpiece_y);
     this.spawnNext();
@@ -60,6 +62,36 @@ class Field {
       this.holdpiece.show();
   }
 
+  showWords(words, x, y) {
+    var x = offset_x + (x-1)*blockSize;
+    var y = offset_y + y*blockSize;
+    var side = 5*blockSize;
+    fill(0);
+    noStroke();
+    textSize(score_size);
+    textStyle(NORMAL);
+    textFont(font);
+    textAlign(CENTER);
+    text(words, x+side/2, y);
+  }
+
+  showScoreBoard() {
+    // this.showScore();
+    // this.showLineCleared();
+    var x = offset_x + (line_x-1)*blockSize;
+    var y = offset_y + (score_y-1)*blockSize;
+    var width = 5*blockSize;
+    var height = 5*blockSize;
+    stroke(0);
+    strokeWeight(bold);
+    fill(255);
+    rect(x, y, width, height);
+    this.showWords("SCORE", score_x, score_y);
+    this.showWords(this.score, score_x, score_y+1);
+    this.showWords("LINES", line_x, line_y);
+    this.showWords(this.lines, line_x, line_y+1);
+  }
+
   show() {
     for(var y = 0; y < this.grid.length; y++){
       for(var x = 0; x < this.grid[y].length; x++){
@@ -82,6 +114,7 @@ class Field {
     this.movingpiece.show();
     this.showNextPiece();
     this.showHoldingPiece();
+    this.showScoreBoard();
   }
 
   placeTetromino() {
@@ -98,6 +131,7 @@ class Field {
   }
 
   clearLines() {
+    var linecleared = 0;
     for(var y = 0; y < this.grid.length; y++){
       var linefull = true;
       for(var x = 0; x < this.grid[y].length; x++){
@@ -107,8 +141,22 @@ class Field {
       }
       if(linefull){
         this.clearLine(y);
+        linecleared++;
       }
     }
+    return linecleared;
+  }
+
+  addScore(linecleared) {
+    if(linecleared == 1)
+      this.score += 40;
+    else if(linecleared == 2)
+      this.score += 100;
+    else if(linecleared == 3)
+      this.score += 300;
+    else if(linecleared == 4)
+      this.score += 1200;
+    this.lines += linecleared;
   }
 
   isLose() {
@@ -142,8 +190,10 @@ class Field {
   update() {
     if(!this.lose){
       if(this.movingpiece.touchGround(this.grid)){
+        var linecleared;
         this.placeTetromino();
-        this.clearLines();
+        linecleared = this.clearLines();
+        this.addScore(linecleared);
         this.lose = this.isLose();
         if(!this.lose)
           this.spawnNext();
