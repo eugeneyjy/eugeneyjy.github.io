@@ -2,9 +2,14 @@
 const canvasWidth = 650;
 const canvasHeight = 650;
 const framesPerSec = 60.0988;
-const dasDelay = 12;  // Initial delay of 16 frams
-const dasMove = 3;  // move every 6 frames after initial delay
-const timer = 950; // millisecond
+const dasDelay = 12;  // Initial delay frames
+const dasMove = 3;  // Frames of movement after inital delay
+const putdelay = 16;
+const linedelay = 20;
+var gravity = 48; // Gravity frames
+var timer = (gravity/framesPerSec)*1000;
+const putsleep = (putdelay/framesPerSec)*1000;
+const linesleep = (linedelay/framesPerSec)*1000;
 const movementDelay = (dasDelay/framesPerSec)*1000;
 const move_timer = (dasMove/framesPerSec)*1000;
 
@@ -27,6 +32,8 @@ const score_x = nextpiece_x;
 const score_y = 12;
 const line_x = nextpiece_x;
 const line_y = 14.5;
+const level_x = nextpiece_x;
+const level_y = 17;
 const text_size = 20;
 const score_size = 14;
 

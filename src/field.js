@@ -11,6 +11,8 @@ class Field {
     this.lose = false;
     this.score = 0;
     this.lines = 0;
+    this.level_need = 10;
+    this.level = 0;
     this.last_random = -1;
     this.fillGrid();
     this.nextpiece = this.spawnTetromino(nextpiece_x,nextpiece_y);
@@ -82,7 +84,7 @@ class Field {
     var x = offset_x + (line_x-1)*blockSize;
     var y = offset_y + (score_y-1)*blockSize;
     var width = 5*blockSize;
-    var height = 5*blockSize;
+    var height = 7.5*blockSize;
     stroke(0);
     strokeWeight(bold);
     fill(255);
@@ -91,6 +93,8 @@ class Field {
     this.showWords(this.score, score_x, score_y+1);
     this.showWords("LINES", line_x, line_y);
     this.showWords(this.lines, line_x, line_y+1);
+    this.showWords("LEVEL", level_x, level_y);
+    this.showWords(this.level, level_x, level_y+1);
   }
 
   show() {
@@ -145,6 +149,9 @@ class Field {
         linecleared++;
       }
     }
+    // if(linecleared > 0){
+    //   sleep(linesleep);
+    // }
     return linecleared;
   }
 
@@ -188,17 +195,41 @@ class Field {
     this.offsetPiece(this.nextpiece);
   }
 
-  update() {
+  adjustLevel() {
+    if(this.lines >= this.level_need){
+      this.level++;
+      this.level_need += 10;
+      this.adjustGravity();
+    }
+  }
+
+  adjustGravity() {
+    if(this.level >= 0 && this.level <= 8){
+      gravity -= 5;
+    }else if(this.level == 9){
+      gravity -= 2;
+    }else if(this.level == 10 || this.level == 13 || this.level == 16 || this.level == 19 || this.level == 29){
+      gravity -= 1;
+    }
+    timer = (gravity/framesPerSec)*1000;
+    clearInterval(update_interval);
+    update_interval = setInterval(function(){field.update();}, timer);
+  }
+
+  update(type) {
     if(!this.lose){
       if(this.movingpiece.touchGround(this.grid)){
         var linecleared;
         this.placeTetromino();
+        if(type != 0)
+          sleep(putsleep);
         linecleared = this.clearLines();
         this.addScore(linecleared);
         this.lose = this.isLose();
         if(!this.lose)
           this.spawnNext();
         this.held = false;
+        this.adjustLevel();
       }else{
         this.movingpiece.moveDown(1);
       }
@@ -328,10 +359,18 @@ class Field {
       this.rotatePiece();
     }else if(keyCode == 32){
       this.pieceStraightDown();
-      this.update();
+      this.update(0);
     }else if(keyCode == 67){
       if(this.held == false)
         this.hold();
     }
   }
+}
+
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
 }
