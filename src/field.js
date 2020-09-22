@@ -11,6 +11,7 @@ class Field {
     this.lose = false;
     this.score = 0;
     this.lines = 0;
+    this.last_random = -1;
     this.fillGrid();
     this.nextpiece = this.spawnTetromino(nextpiece_x,nextpiece_y);
     this.spawnNext();
@@ -206,6 +207,10 @@ class Field {
 
   spawnTetromino(x, y) {
     var random1 = Math.floor(Math.random()*7);
+    if(random1 == this.last_random){
+      random1 = Math.floor(Math.random()*7);
+    }
+    this.last_random = random1;
     var tetromino;
     switch(random1) {
       case 0:

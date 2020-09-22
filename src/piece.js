@@ -112,14 +112,6 @@ class Itetromino extends Piece {
     this.shapes = ishape;
     this.blocks = this.fillBlocks(this.shapes[0]);
   }
-
-  // clonePiece() {
-  //   var clone = new Itetromino(this.x, this.y, this.color);
-  //   for(var i = 0; i < this.blocks; i++){
-  //     clone.blocks[i] = this.blocks[i].copyBlock();
-  //   }
-  //   return clone;
-  // }
 }
 
 class Otetromino extends Piece {

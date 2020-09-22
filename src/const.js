@@ -1,9 +1,12 @@
 // sketch.js
 const canvasWidth = 650;
 const canvasHeight = 650;
-const timer = 600; // millisecond
-const movementDelay = 200;
-const move_timer = 50;
+const framesPerSec = 60.0988;
+const dasDelay = 12;  // Initial delay of 16 frams
+const dasMove = 3;  // move every 6 frames after initial delay
+const timer = 950; // millisecond
+const movementDelay = (dasDelay/framesPerSec)*1000;
+const move_timer = (dasMove/framesPerSec)*1000;
 
 // block.js
 const blockSize = 25; // width and height of each block
