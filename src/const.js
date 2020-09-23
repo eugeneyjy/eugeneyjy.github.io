@@ -12,6 +12,9 @@ const putsleep = (putdelay/framesPerSec)*1000;
 const linesleep = (linedelay/framesPerSec)*1000;
 const movementDelay = (dasDelay/framesPerSec)*1000;
 const move_timer = (dasMove/framesPerSec)*1000;
+const pause_x = 5.1;
+const pause_y = 10;
+const pause_size = 38;
 
 // block.js
 const blockSize = 25; // width and height of each block
@@ -28,11 +31,11 @@ const nextpiece_x = 12;
 const nextpiece_y = 3;
 const holdpiece_x = -5;
 const holdpiece_y = 3;
-const score_x = nextpiece_x;
+const score_x = 13.5;
 const score_y = 12;
-const line_x = nextpiece_x;
+const line_x = score_x;
 const line_y = 14.5;
-const level_x = nextpiece_x;
+const level_x = score_x;
 const level_y = 17;
 const text_size = 20;
 const score_size = 14;

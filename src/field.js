@@ -65,23 +65,23 @@ class Field {
       this.holdpiece.show();
   }
 
-  showWords(words, x, y) {
-    var x = offset_x + (x-1)*blockSize;
+  showWords(words, x, y, font_size) {
+    var x = offset_x + x*blockSize;
     var y = offset_y + y*blockSize;
     var side = 5*blockSize;
     fill(0);
     noStroke();
-    textSize(score_size);
+    textSize(font_size);
     textStyle(NORMAL);
     textFont(font);
     textAlign(CENTER);
-    text(words, x+side/2, y);
+    text(words, x, y);
   }
 
   showScoreBoard() {
     // this.showScore();
     // this.showLineCleared();
-    var x = offset_x + (line_x-1)*blockSize;
+    var x = offset_x + (line_x-2.5)*blockSize;
     var y = offset_y + (score_y-1)*blockSize;
     var width = 5*blockSize;
     var height = 7.5*blockSize;
@@ -89,12 +89,12 @@ class Field {
     strokeWeight(bold);
     fill(255);
     rect(x, y, width, height);
-    this.showWords("SCORE", score_x, score_y);
-    this.showWords(this.score, score_x, score_y+1);
-    this.showWords("LINES", line_x, line_y);
-    this.showWords(this.lines, line_x, line_y+1);
+    this.showWords("SCORE", score_x, score_y, score_size);
+    this.showWords(this.score, score_x, score_y+1, score_size);
+    this.showWords("LINES", line_x, line_y, score_size);
+    this.showWords(this.lines, line_x, line_y+1, score_size);
     this.showWords("LEVEL", level_x, level_y);
-    this.showWords(this.level, level_x, level_y+1);
+    this.showWords(this.level, level_x, level_y+1, score_size);
   }
 
   show() {
