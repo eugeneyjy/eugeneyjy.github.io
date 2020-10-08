@@ -33,7 +33,7 @@ function draw() {
 function keyPressed() {
   speed_moving = false;
   if(!pause){
-    if(keyCode == 80){
+    if(keyCode == 80 || keyCode == 27){
       clearInterval(update_interval);
       clearInterval(move_interval);
       clearInterval(down_interval);
@@ -48,7 +48,7 @@ function keyPressed() {
       delay_timeout = setTimeout(setMove, delay_time);
     }
   }else if(pause){
-    if(keyCode == 80){
+    if(keyCode == 80 || keyCode == 27){
       update_interval = setInterval(function(){field.update();}, timer);
       down_interval = setInterval(function(){field.downMove();}, move_timer);
       pause = !pause;
