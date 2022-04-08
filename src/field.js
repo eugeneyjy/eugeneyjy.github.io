@@ -93,11 +93,16 @@ class Field {
     this.showWords(this.score, score_x, score_y+1, score_size);
     this.showWords("LINES", line_x, line_y, score_size);
     this.showWords(this.lines, line_x, line_y+1, score_size);
-    this.showWords("LEVEL", level_x, level_y);
+    this.showWords("LEVEL", level_x, level_y, score_size);
     this.showWords(this.level, level_x, level_y+1, score_size);
   }
 
   show() {
+    rectMode(CORNER);
+    stroke(0);
+    strokeWeight(borderWeight);
+    fill(238, 238, 238);
+    rect(borderWeight, borderWeight, canvasWidth, canvasHeight);
     for(var y = 0; y < this.grid.length; y++){
       for(var x = 0; x < this.grid[y].length; x++){
         if(this.grid[y][x].state == 0)

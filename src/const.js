@@ -1,6 +1,8 @@
 // sketch.js
-const canvasWidth = 650;
-const canvasHeight = 650;
+const canvasWidth = 600;
+const canvasHeight = 600;
+const helperWidth = 100;
+const borderWeight = 5;
 const framesPerSec = 60.0988;
 const dasDelay = 12;  // Initial delay frames
 const dasMove = 3;  // Frames of movement after inital delay
@@ -17,14 +19,14 @@ const pause_y = 10;
 const pause_size = 38;
 
 // block.js
-const blockSize = 25; // width and height of each block
+const blockSize = 24; // width and height of each block
 const alpha = 100;
 
 // field.js
 const width = 10; // field default width
 const height = 20;  // field default height
-const offset_x = (canvasWidth-(width*blockSize))/2; // offset field in the middle
-const offset_y = (canvasHeight-(height*blockSize))/2; // offset field in the middle
+const offset_x = ((canvasWidth-(width*blockSize))/2) + borderWeight; // offset field in the middle
+const offset_y = ((canvasHeight-(height*blockSize))/2) + borderWeight; // offset field in the middle
 const starting_x = 3;
 const starting_y = 0;
 const nextpiece_x = 12;
@@ -83,3 +85,8 @@ const lcolor = {r: 255, g: 151, b: 28};
 // stroke
 const bold = 2.2;
 const light = 1.5;
+
+// instruction coordinate
+const instruction_x = canvasWidth+50;
+const instruction_y = 25;
+const instruction_radius = 21;

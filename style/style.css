@@ -14,5 +14,5 @@ header h1 {
 canvas {
   display: flex;
   margin: 0 auto;
-  border: 5px solid black;
+  /* border: 5px solid black; */
 }

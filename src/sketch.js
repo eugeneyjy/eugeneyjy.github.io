@@ -8,25 +8,30 @@ var remaining;
 var startTime;
 var speed_moving = false;
 var pause = false;
+var instruct_clicked = false;
 
 function preload() {
   font = loadFont('./assets/font/PressStart2P-Regular.ttf');
 }
 
 function setup() {
-  var canvas = createCanvas(canvasWidth, canvasHeight);
+  var canvas = createCanvas(canvasWidth + helperWidth, canvasHeight + borderWeight*2);
+  canvas.style('padding-left', helperWidth + 'px');
   update_interval = setInterval(function(){field.update();}, timer);
   down_interval = setInterval(function(){field.downMove();}, move_timer);
 }
 
 function draw() {
-  if(!pause){
-    background(238,238,238);
+  if(!pause && !instruct_clicked){
     field.placeHint();
     field.show();
-  }else if(pause){
+    drawHelper();
+  }else if(pause && !instruct_clicked){
     background(255,255,255,125);
     field.showWords('PAUSE', pause_x, pause_y, pause_size);
+  }else if(instruct_clicked) {
+    background(255,255,255,125);
+    drawInstruction();
   }
 }
 
@@ -34,11 +39,7 @@ function keyPressed() {
   speed_moving = false;
   if(!pause){
     if(keyCode == 80 || keyCode == 27){
-      clearInterval(update_interval);
-      clearInterval(move_interval);
-      clearInterval(down_interval);
-      pause = !pause;
-      noLoop();
+      pause_field();
     }else if(keyCode == UP_ARROW || keyCode == 32 || keyCode == DOWN_ARROW || keyCode == 67){
       field.pressMove();
     }else{
@@ -49,10 +50,7 @@ function keyPressed() {
     }
   }else if(pause){
     if(keyCode == 80 || keyCode == 27){
-      update_interval = setInterval(function(){field.update();}, timer);
-      down_interval = setInterval(function(){field.downMove();}, move_timer);
-      pause = !pause;
-      loop();
+      unpause_field();
     }
   }
 }
@@ -72,4 +70,32 @@ function setMove() {
   clearInterval(move_interval);
   move_interval = setInterval(function(){field.leftRightMove();}, move_timer);
   speed_moving = true;
+}
+
+function mouseClicked() {
+  if(mouseX >= instruction_x-instruction_radius && mouseX <= instruction_x+instruction_radius && mouseY >= instruction_y-instruction_radius && mouseY <= instruction_y+instruction_radius) {
+    pause_field();
+    instruct_clicked = true;
+  } else {
+    unpause_field();
+    instruct_clicked = false;
+  }
+}
+
+function pause_field() {
+  clearInterval(update_interval);
+  clearInterval(move_interval);
+  clearInterval(down_interval);
+  pause = true;
+  noLoop();
+}
+
+function unpause_field() {
+  clearInterval(update_interval);
+  clearInterval(move_interval);
+  clearInterval(down_interval);
+  update_interval = setInterval(function(){field.update();}, timer);
+  down_interval = setInterval(function(){field.downMove();}, move_timer);
+  pause = false;
+  loop();
 }
