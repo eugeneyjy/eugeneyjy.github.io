@@ -4,8 +4,6 @@ var delay_timeout;
 var update_interval;
 var move_interval;
 var down_interval;
-var remaining;
-var startTime;
 var speed_moving = false;
 var pause = false;
 var instruct_clicked = false;
@@ -21,17 +19,42 @@ function setup() {
   down_interval = setInterval(function(){field.downMove();}, move_timer);
 }
 
+function reset() {
+  field = new Field(width, height);
+
+  // from const.js
+  gravity = 48; // Gravity frames
+  timer = (gravity/framesPerSec)*1000;
+
+  speed_moving = false;
+  pause = false;
+  instruct_clicked = false;
+
+  clearInterval(move_interval);
+  clearTimeout(delay_timeout);
+
+  setup();
+  loop();
+}
+
 function draw() {
-  if(!pause && !instruct_clicked){
-    field.placeHint();
-    field.show();
-    drawHelper();
-  }else if(pause && !instruct_clicked){
-    background(255,255,255,125);
-    field.showWords('PAUSE', pause_x, pause_y, pause_size);
-  }else if(instruct_clicked) {
-    background(255,255,255,125);
-    drawInstruction();
+  if(field.isLose()) {
+    background(255,255,255,200);
+    pause_field();
+    field.showWords('Game Over', gameOver_x, gameOver_y-1, gameOver_size);
+    field.showWords('Play Again', gameOver_x, gameOver_y+1, gameOver_size-20);
+  } else {
+    if(!pause && !instruct_clicked){
+      field.placeHint();
+      field.show();
+      drawHelper();
+    }else if(pause && !instruct_clicked){
+      background(255,255,255,200);
+      field.showWords('PAUSE', pause_x, pause_y, pause_size);
+    }else if(instruct_clicked) {
+      background(255,255,255,200);
+      drawInstruction();
+    }
   }
 }
 
@@ -49,8 +72,10 @@ function keyPressed() {
       delay_timeout = setTimeout(setMove, delay_time);
     }
   }else if(pause){
-    if(keyCode == 80 || keyCode == 27){
-      unpause_field();
+    if(!instruct_clicked) {
+      if(keyCode == 80 || keyCode == 27){
+        unpause_field();
+      }
     }
   }
 }
@@ -72,13 +97,36 @@ function setMove() {
   speed_moving = true;
 }
 
+function mouseMoved() {
+  // console.log("Perhaps");
+  if(field.isLose()) {
+    var x = offset_x + gameOver_x*blockSize;
+    var y = offset_y + (gameOver_y+1)*blockSize;
+    if(mouseX >= x - 30 && mouseX <= x + 130 && mouseY >= y -20 && mouseY <= y + 0) {
+      console.log("YES");
+      fill('#38bdf8');
+      text('Play Again', x, y);
+    } else {
+      field.showWords('Play Again', gameOver_x, gameOver_y+1, gameOver_size-20);
+    }
+  }
+}
+
 function mouseClicked() {
-  if(mouseX >= instruction_x-instruction_radius && mouseX <= instruction_x+instruction_radius && mouseY >= instruction_y-instruction_radius && mouseY <= instruction_y+instruction_radius) {
-    pause_field();
-    instruct_clicked = true;
+  if(field.isLose()) {
+    var x = offset_x + gameOver_x*blockSize;
+    var y = offset_y + (gameOver_y+1)*blockSize;
+    if(mouseX >= x - 30 && mouseX <= x + 130 && mouseY >= y -20 && mouseY <= y + 0) {
+      reset();
+    }
   } else {
-    unpause_field();
-    instruct_clicked = false;
+    if(mouseX >= instruction_x-instruction_radius && mouseX <= instruction_x+instruction_radius && mouseY >= instruction_y-instruction_radius && mouseY <= instruction_y+instruction_radius) {
+      pause_field();
+      instruct_clicked = true;
+    } else {
+      unpause_field();
+      instruct_clicked = false;
+    }
   }
 }
 
@@ -91,11 +139,13 @@ function pause_field() {
 }
 
 function unpause_field() {
-  clearInterval(update_interval);
-  clearInterval(move_interval);
-  clearInterval(down_interval);
-  update_interval = setInterval(function(){field.update();}, timer);
-  down_interval = setInterval(function(){field.downMove();}, move_timer);
-  pause = false;
-  loop();
+  if(!field.isLose()) {
+    clearInterval(update_interval);
+    clearInterval(move_interval);
+    clearInterval(down_interval);
+    update_interval = setInterval(function(){field.update();}, timer);
+    down_interval = setInterval(function(){field.downMove();}, move_timer);
+    pause = false;
+    loop();
+  }
 }

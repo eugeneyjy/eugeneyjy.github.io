@@ -17,6 +17,9 @@ const move_timer = (dasMove/framesPerSec)*1000;
 const pause_x = 5.1;
 const pause_y = 10;
 const pause_size = 38;
+const gameOver_x = 5.1;
+const gameOver_y = 10;
+const gameOver_size = 38;
 
 // block.js
 const blockSize = 24; // width and height of each block
